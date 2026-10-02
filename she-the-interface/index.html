@@ -23,7 +23,7 @@
 :root[data-theme="dark"]{--wall:#1E2125;--plinth:#272B30;--ink:#E8EAED;--quiet:#A3AAB2;--line:#3A3F45;--kiosk:#0F1C36;}
 *,*::before,*::after{box-sizing:inherit}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
-body{margin:0;background:var(--wall);color:var(--ink);font-family:var(--serif);font-size:1.28rem;line-height:1.7;-webkit-font-smoothing:antialiased;text-align:left}
+body{margin:0;background:var(--wall);color:var(--ink);font-family:var(--serif);font-size:1.15rem;line-height:1.7;-webkit-font-smoothing:antialiased;text-align:left}
 img{max-width:100%;display:block}
 a{color:inherit}
 :focus-visible{outline:3px solid var(--glow);outline-offset:3px;border-radius:4px}
@@ -32,10 +32,10 @@ a{color:inherit}
 .text p{margin:0 0 1.1rem}
 
 /* hero: the entrance kiosk, re-enacted */
-.hero{text-align:center;min-height:100svh;display:grid;justify-items:center;align-content:center;gap:clamp(28px,5vh,44px);padding:clamp(40px,8vh,80px) clamp(20px,5vw,48px)}
-.hero h1{font-family:var(--sans);font-weight:900;font-size:clamp(2.9rem,7.6vw,5.4rem);line-height:1.02;letter-spacing:-.02em;margin:0}
-.hero .by{font-family:var(--sans);color:var(--quiet);margin:.7rem 0 0;font-size:1.2rem}
-.kiosk{background:var(--kiosk);color:var(--kiosk-ink);border-radius:18px;border:10px solid #2C3138;max-width:660px;width:100%;aspect-ratio:16/10;display:grid;grid-template-rows:1fr auto;padding:24px}
+.hero{text-align:center;min-height:100svh;display:grid;justify-items:center;align-content:center;gap:clamp(12px,2.6vh,36px);padding:clamp(16px,4vh,64px) clamp(20px,5vw,48px)}
+.hero h1{font-family:var(--sans);font-weight:900;font-size:clamp(2.2rem,min(7.6vw,9.5vh),5.4rem);line-height:1.02;letter-spacing:-.02em;margin:0}
+.hero .by{font-family:var(--sans);color:var(--quiet);margin:.5rem 0 0;font-size:clamp(1rem,2.4vh,1.2rem);line-height:1.5}
+.kiosk{background:var(--kiosk);color:var(--kiosk-ink);border-radius:18px;border:10px solid #2C3138;width:min(100%,660px,max(300px,calc((100svh - 300px) * 1.6)));aspect-ratio:16/10;display:grid;grid-template-rows:1fr auto;padding:24px}
 .kiosk .center{display:grid;place-items:center;align-content:center;gap:16px}
 .kiosk .prompt{font-family:var(--sans);font-size:1.05rem;opacity:.8;margin:0}
 .kiosk .screen-msg{font-family:var(--sans);font-weight:900;font-size:clamp(1.3rem,3vw,1.7rem);color:#fff;margin:0;display:none}
@@ -48,13 +48,13 @@ a{color:inherit}
 .ticket .msg{font-weight:900;font-size:1.4rem;margin:0 0 .35rem}
 .ticket .note{font-family:var(--serif);color:var(--quiet);margin:0;font-size:1.08rem}
 .reset{font-family:var(--sans);font-size:.95rem;color:var(--quiet);background:none;border:0;text-decoration:underline;cursor:pointer;margin-top:10px;display:none}
-.hint{font-size:1.05rem;color:var(--quiet);margin:0}
+.hint{font-size:clamp(.95rem,2.2vh,1.05rem);color:var(--quiet);margin:0}
 
 /* overview */
-.lede{font-size:clamp(1.4rem,2.6vw,1.7rem);line-height:1.5;margin:64px 0 32px;max-width:none}
+.lede{font-size:clamp(1.25rem,2.3vw,1.5rem);line-height:1.5;margin:64px 0 32px;max-width:none}
 .facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:24px 40px;border-top:1px solid var(--line);padding:32px 0 8px;margin:0}
 .facts dt{font-family:var(--sans);font-weight:700;font-size:1rem;color:var(--quiet)}
-.facts dd{margin:.2rem 0 0;font-size:1.12rem;line-height:1.5}
+.facts dd{margin:.2rem 0 0;font-size:1.02rem;line-height:1.5}
 
 /* video */
 .video{margin:44px 0 0}
@@ -86,11 +86,11 @@ figcaption{font-size:.95rem;color:var(--quiet);margin-top:8px;font-family:var(--
 .steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:32px}
 .steps li{border-top:2px solid var(--ink);padding-top:16px}
 .steps .n{font-family:var(--sans);font-weight:700;color:var(--quiet);font-size:1rem}
-.steps h3{font-family:var(--sans);font-weight:700;font-size:1.25rem;margin:.2rem 0 .5rem}
-.steps p{margin:0;font-size:1.1rem;line-height:1.6;color:var(--quiet)}
+.steps h3{font-family:var(--sans);font-weight:700;font-size:1.15rem;margin:.2rem 0 .5rem}
+.steps p{margin:0;font-size:1rem;line-height:1.6;color:var(--quiet)}
 
 /* peer feedback */
-blockquote{margin:0;max-width:none;border-left:3px solid var(--glow);padding-left:24px;font-style:italic;font-size:1.3rem;line-height:1.7}
+blockquote{margin:0;max-width:none;border-left:3px solid var(--glow);padding-left:24px;font-style:italic;font-size:1.15rem;line-height:1.7}
 blockquote p{margin:0 0 1.2rem}
 .cite{font-family:var(--sans);font-size:1rem;color:var(--quiet);margin:12px 0 0;padding-left:27px}
 
@@ -99,6 +99,14 @@ blockquote p{margin:0 0 1.2rem}
 main{padding-bottom:96px}
 footer{border-top:1px solid var(--line);padding:28px 0 48px;font-family:var(--sans);font-size:1rem;color:var(--quiet)}
 footer p{margin:.25rem 0}
+
+/* breathing room: images 90%, text 80% of the column */
+.exit-fig{width:100%;max-width:820px}
+@media (min-width:860px){
+  .room > .shots,.storyboard,.video,.room > .room-no,.room > h2,.exit-fig{width:90%;margin-left:auto;margin-right:auto}
+  .exit-fig{max-width:none;width:72%}
+  .text,.lede,.facts,.steps,blockquote,.cite,.process > h2,.voices > h2,.reflect > h2{width:80%;margin-left:auto;margin-right:auto}
+}
 @media (max-width:640px){.shots.two{grid-template-columns:1fr}}
 @media (prefers-reduced-motion:reduce){.ticket.show{animation:none}}
 </style>
@@ -209,7 +217,7 @@ footer p{margin:.25rem 0}
 </section>
 
 <section class="wrap exit" aria-label="Exit">
-  <figure style="width:100%;max-width:820px">
+  <figure class="exit-fig">
     <img src="images/5_0_End.jpg" alt="Final white room with the closing wall text">
   </figure>
   <p>You have seen the default.<br>Will you choose it again?</p>
