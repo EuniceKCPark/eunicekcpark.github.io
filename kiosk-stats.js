@@ -24,8 +24,12 @@
   function stored(){try{return localStorage.getItem(FLAG);}catch(e){return null;}}
   function record(choice){
     if(TEST||stored())return Promise.resolve();
-    try{localStorage.setItem(FLAG,choice);}catch(e){}
-    return fetch(SB_URL+'/rest/v1/kiosk_choices',{method:'POST',headers:Object.assign({'Prefer':'return=minimal'},HEAD),body:JSON.stringify({choice:choice})}).catch(function(){});
+    return fetch(SB_URL+'/rest/v1/kiosk_choices',{method:'POST',headers:Object.assign({'Prefer':'return=minimal'},HEAD),body:JSON.stringify({choice:choice})})
+      .then(function(r){
+        if(r.ok){try{localStorage.setItem(FLAG,choice);}catch(e){}}
+        else{console.warn('[kiosk-stats] could not record choice:',r.status);}
+      })
+      .catch(function(e){console.warn('[kiosk-stats] could not record choice:',e);});
   }
   function arc(a0,a1){
     var x0=Math.sin(a0),y0=-Math.cos(a0),x1=Math.sin(a1),y1=-Math.cos(a1),big=(a1-a0)>Math.PI?1:0;
@@ -33,7 +37,8 @@
   }
   function draw(d,a,mine){
     var tot=d+a,svg=document.getElementById('pie');
-    if(!tot||!svg)return;
+    if(!svg)return;
+    if(!tot){svg.innerHTML='<circle r="1" class="slice-empty"></circle>';document.getElementById('pie-sum').textContent='No visitors counted yet.';document.getElementById('lg-default').textContent='Issue ticket: 0';document.getElementById('lg-alt').textContent='Explored alternatives: 0';document.getElementById('stats').hidden=false;return;}
     var pd=Math.round(d/tot*100),pa=100-pd,html='';
     if(d===0||a===0){html='<circle r="1" class="'+(d?'slice-default':'slice-alt')+'"></circle>';}
     else{var ad=d/tot*2*Math.PI;html='<path class="slice-default" d="'+arc(0,ad)+'"></path><path class="slice-alt" d="'+arc(ad,2*Math.PI)+'"></path>';}
@@ -45,15 +50,17 @@
     ld.className=mine==='default'?'you':'';la.className=mine==='alternative'?'you':'';
     document.getElementById('stats').hidden=false;
   }
-  function loadStats(){
+  function loadStats(current){
     return fetch(SB_URL+'/rest/v1/rpc/kiosk_stats',{method:'POST',headers:HEAD,body:'{}'})
-      .then(function(r){if(!r.ok)throw r;return r.json();})
+      .then(function(r){if(!r.ok)throw new Error('status '+r.status);return r.json();})
       .then(function(rows){
         var d=0,a=0;(rows||[]).forEach(function(r){if(r.choice==='default')d=+r.n;if(r.choice==='alternative')a=+r.n;});
-        draw(d,a,stored());
-      }).catch(function(){});
+        var mine=stored();
+        if(TEST){mine=current;if(current==='default')d++;else a++;}  /* preview only, nothing saved */
+        draw(d,a,mine);
+      }).catch(function(e){console.warn('[kiosk-stats] could not load results:',e);});
   }
-  function choose(c){record(c).then(loadStats);}
+  function choose(c){record(c).then(function(){return loadStats(c);});}
   function hide(){var s=document.getElementById('stats');if(s)s.hidden=true;}
   window.KioskStats={choose:choose,hide:hide};
 })();
