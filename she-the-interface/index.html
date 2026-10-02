@@ -42,11 +42,11 @@ a{color:inherit}
 .issue{font-family:var(--sans);font-weight:700;font-size:clamp(1.2rem,2.8vw,1.5rem);color:#fff;background:transparent;border:2px solid var(--glow);border-radius:10px;padding:14px 36px;cursor:pointer;box-shadow:0 0 18px rgba(127,196,240,.45),inset 0 0 12px rgba(127,196,240,.25)}
 .issue:hover{background:rgba(127,196,240,.12)}
 .alt{justify-self:center;font-family:var(--sans);font-size:.85rem;color:#9FB3D1;background:none;border:0;text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:6px}
-.ticket{width:min(100%,420px);font-family:var(--sans);background:var(--plinth);border:1px dashed var(--line);border-radius:6px;padding:20px 24px;display:none}
+.ticket{width:fit-content;min-width:min(100%,420px);max-width:100%;font-family:var(--sans);background:var(--plinth);border:1px dashed var(--line);border-radius:6px;padding:20px 24px;display:none}
 .ticket.show{display:block;animation:print .5s ease-out}
 @keyframes print{from{clip-path:inset(0 0 100% 0)}to{clip-path:inset(0 0 0 0)}}
 .ticket .msg{font-weight:900;font-size:1.4rem;margin:0 0 .35rem}
-.ticket .note{font-family:var(--serif);color:var(--quiet);margin:0;font-size:1.08rem}
+.ticket .note{width:0;min-width:100%;font-family:var(--serif);color:var(--quiet);margin:0;font-size:1.08rem}
 .reset{font-family:var(--sans);font-size:.95rem;color:var(--quiet);background:none;border:0;text-decoration:underline;cursor:pointer;margin-top:10px;display:none}
 .hint{font-size:clamp(calc(.95rem - 1.33px),calc(2.2vh - 1.33px),calc(1.05rem - 1.33px));color:var(--quiet);margin:0}
 
@@ -109,6 +109,7 @@ footer p{margin:.25rem 0}
   .text,.lede,.facts,.steps,blockquote,.cite,.process > h2,.voices > h2,.reflect > h2{width:80%;margin-left:auto;margin-right:auto}
 }
 @media (min-width:1000px){.facts,.steps{grid-template-columns:repeat(4,1fr);gap:24px 32px}}
+@media (min-width:600px){.ticket .msg{white-space:nowrap}}
 @media (max-width:640px){.shots.two{grid-template-columns:1fr}}
 @media (prefers-reduced-motion:reduce){.ticket.show{animation:none}}
 </style>
