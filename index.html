@@ -1,6 +1,288 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Eunice Park</title>
-<meta http-equiv="refresh" content="0; url=she-the-interface/">
-</head><body><p><a href="she-the-interface/">She, the Interface</a></p></body></html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>She, the Interface | Eunice Park</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --wall:#ECEEF0; --plinth:#FFFFFF; --ink:#23272C; --quiet:#5E656D;
+  --kiosk:#17284A; --kiosk-ink:#DCE8FA; --glow:#7FC4F0; --line:#D3D7DC;
+  --sans:"Nunito",ui-rounded,"Arial Rounded MT Bold",system-ui,sans-serif;
+  --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){--wall:#1E2125;--plinth:#272B30;--ink:#E8EAED;--quiet:#A3AAB2;--line:#3A3F45;--kiosk:#0F1C36;}
+}
+:root[data-theme="dark"]{--wall:#1E2125;--plinth:#272B30;--ink:#E8EAED;--quiet:#A3AAB2;--line:#3A3F45;--kiosk:#0F1C36;}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--wall);color:var(--ink);font-family:var(--serif);font-size:1.15rem;line-height:1.7;-webkit-font-smoothing:antialiased;text-align:left}
+img{max-width:100%;display:block}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--glow);outline-offset:3px;border-radius:4px}
+.wrap{max-width:1120px;margin:0 auto;padding:0 clamp(20px,5vw,48px)}
+.text{max-width:none;margin:0}
+.text p{margin:0 0 1.1rem}
+
+/* hero: the entrance kiosk, re-enacted */
+.hero{text-align:center;min-height:100svh;display:grid;justify-items:center;align-content:center;gap:clamp(10px,2.2vh,32px);padding:clamp(12px,3vh,56px) clamp(20px,5vw,48px)}
+.hero h1{font-family:var(--sans);font-weight:900;font-size:clamp(2.3rem,calc(min(7.6vw,9.5vh) + 1.33px),5.5rem);line-height:1.02;letter-spacing:-.02em;margin:0}
+.hero .by{font-family:var(--sans);color:var(--quiet);margin:.5rem 0 0;font-size:clamp(calc(1rem - 1.33px),calc(2.4vh - 1.33px),calc(1.2rem - 1.33px));line-height:1.45}
+.kiosk{background:var(--kiosk);color:var(--kiosk-ink);border-radius:18px;border:10px solid #2C3138;width:min(100%,720px,max(320px,calc((100svh - 235px) * 1.6)));aspect-ratio:16/10;display:grid;grid-template-rows:1fr auto;padding:24px}
+.kiosk .center{display:grid;place-items:center;align-content:center;gap:16px}
+.kiosk .prompt{font-family:var(--sans);font-size:1.05rem;opacity:.8;margin:0}
+.kiosk .screen-msg{font-family:var(--sans);font-weight:900;font-size:clamp(1.3rem,3vw,1.7rem);color:#fff;margin:0;display:none}
+.issue{font-family:var(--sans);font-weight:700;font-size:clamp(1.2rem,2.8vw,1.5rem);color:#fff;background:transparent;border:2px solid var(--glow);border-radius:10px;padding:14px 36px;cursor:pointer;box-shadow:0 0 18px rgba(127,196,240,.45),inset 0 0 12px rgba(127,196,240,.25)}
+.issue:hover{background:rgba(127,196,240,.12)}
+.alt{justify-self:center;font-family:var(--sans);font-size:.85rem;color:#9FB3D1;background:none;border:0;text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:6px}
+.ticket{width:fit-content;min-width:min(100%,420px);max-width:100%;font-family:var(--sans);background:var(--plinth);border:1px dashed var(--line);border-radius:6px;padding:20px 24px;display:none}
+.ticket.show{display:block;animation:print .5s ease-out}
+@keyframes print{from{clip-path:inset(0 0 100% 0)}to{clip-path:inset(0 0 0 0)}}
+.ticket .msg{font-weight:900;font-size:1.4rem;margin:0 0 .35rem}
+.ticket .note{width:0;min-width:100%;font-family:var(--serif);color:var(--quiet);margin:0;font-size:1.08rem}
+.reset{font-family:var(--sans);font-size:.95rem;color:var(--quiet);background:none;border:0;text-decoration:underline;cursor:pointer;margin-top:10px;display:none}
+.hint{font-size:clamp(calc(.95rem - 1.33px),calc(2.2vh - 1.33px),calc(1.05rem - 1.33px));color:var(--quiet);margin:0}
+
+/* overview */
+.lede{font-size:clamp(1.25rem,2.3vw,1.5rem);line-height:1.5;margin:64px 0 32px;max-width:none}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:24px 40px;border-top:1px solid var(--line);padding:32px 0 8px;margin:0}
+.facts dt{font-family:var(--sans);font-weight:700;font-size:1rem;color:var(--quiet)}
+.facts dd{margin:.2rem 0 0;font-size:1.02rem;line-height:1.5}
+
+/* video */
+.video{margin:44px 0 0}
+.video .alt-link{font-family:var(--sans);font-size:.95rem;color:var(--quiet);margin:10px 0 0}
+.player{position:relative;aspect-ratio:16/9;border-radius:8px;overflow:hidden;background:#000}
+.player iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.poster{position:absolute;inset:0;width:100%;height:100%;padding:0;border:0;cursor:pointer;background:none;display:block}
+.poster img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.7)}
+.poster:hover img{filter:brightness(.6)}
+.play{position:absolute;left:50%;top:50%;width:80px;height:80px;margin:-40px 0 0 -40px;border-radius:50%;border:2px solid var(--glow);box-shadow:0 0 22px rgba(127,196,240,.6);background:rgba(23,40,74,.55)}
+.play::after{content:"";position:absolute;left:32px;top:25px;border-style:solid;border-width:15px 0 15px 23px;border-color:transparent transparent transparent #fff}
+.poster .label{position:absolute;left:0;right:0;bottom:18px;color:#fff;font-family:var(--sans);font-weight:700;font-size:1.1rem;text-shadow:0 1px 6px rgba(0,0,0,.6)}
+.video .alt-link{font-family:var(--sans);font-size:.95rem;color:var(--quiet);margin:10px 0 0}
+
+/* rooms */
+.room{padding:clamp(72px,11vh,120px) 0 0}
+.room-no{display:block;font-family:var(--sans);font-weight:700;color:var(--quiet);font-size:1.1rem;margin-bottom:6px}
+.room h2{font-family:var(--sans);font-weight:900;font-size:clamp(2rem,4.8vw,3.2rem);line-height:1.08;letter-spacing:-.015em;margin:0 0 28px}
+.shots{display:grid;gap:14px;margin:0 0 32px}
+.shots.two{grid-template-columns:1fr 1fr}
+figure{margin:0}
+figure img{border-radius:6px;background:var(--plinth);width:100%}
+figcaption{font-size:.95rem;color:var(--quiet);margin-top:8px;font-family:var(--sans)}
+.storyboard{margin:8px 0 32px}
+
+/* process */
+.process,.reflect,.voices{padding:clamp(88px,12vh,136px) 0 0}
+.process h2,.reflect h2,.voices h2{font-family:var(--sans);font-weight:900;font-size:clamp(1.8rem,4vw,2.6rem);margin:0 0 32px}
+.steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:32px}
+.steps li{border-top:2px solid var(--ink);padding-top:16px}
+.steps .n{font-family:var(--sans);font-weight:700;color:var(--quiet);font-size:1rem}
+.steps h3{font-family:var(--sans);font-weight:700;font-size:1.15rem;margin:.2rem 0 .5rem}
+.steps p{margin:0;font-size:1rem;line-height:1.6;color:var(--quiet)}
+
+/* peer feedback */
+blockquote{margin:0;max-width:none;border-left:3px solid var(--glow);padding-left:24px;font-style:italic;font-size:1.15rem;line-height:1.7}
+blockquote p{margin:0 0 1.2rem}
+.cite{font-family:var(--sans);font-size:1rem;color:var(--quiet);margin:12px 0 0;padding-left:27px}
+
+.exit{text-align:center;display:grid;place-items:center;gap:40px;padding:clamp(88px,12vh,136px) 0 0}
+.exit p{font-family:var(--sans);font-weight:700;font-size:clamp(1.7rem,4.4vw,2.6rem);line-height:1.3;margin:0}
+main{padding-bottom:96px}
+footer{border-top:1px solid var(--line);padding:28px 0 48px;font-family:var(--sans);font-size:1rem;color:var(--quiet)}
+footer p{margin:.25rem 0}
+
+/* breathing room: images 90%, text 80% of the column */
+.exit-fig{width:100%;max-width:820px}
+@media (min-width:860px){
+  .room > .shots,.storyboard,.video,.room > .room-no,.room > h2,.exit-fig{width:90%;margin-left:auto;margin-right:auto}
+  .exit-fig{max-width:none;width:72%}
+  .facts,.steps{grid-template-columns:repeat(2,1fr)}
+  .text,.lede,.facts,.steps,blockquote,.cite,.process > h2,.voices > h2,.reflect > h2{width:80%;margin-left:auto;margin-right:auto}
+}
+@media (min-width:1000px){.facts,.steps{grid-template-columns:repeat(4,1fr);gap:24px 32px}}
+@media (min-width:600px){.ticket .msg{white-space:nowrap}}
+@media (max-width:640px){.shots.two{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){.ticket.show{animation:none}}
+</style>
+</head>
+<body>
+<main>
+<header class="hero">
+  <div>
+    <h1>She, the Interface</h1>
+    <p class="by">A virtual exhibition on the feminization of Korean AI interfaces<br>Curated by Eunice Park, 2026</p>
+  </div>
+  <div class="kiosk" role="group" aria-label="Exhibition entrance kiosk">
+    <div class="center">
+      <p class="prompt" id="prompt">Welcome. Please take your ticket.</p>
+      <button class="issue" id="issue" type="button">Issue ticket</button>
+      <p class="screen-msg" id="screen">Check the message on your ticket!</p>
+    </div>
+    <button class="alt" id="alt" type="button">Advanced settings / Explore alternative personas</button>
+  </div>
+  <div class="ticket" id="ticket" aria-live="polite">
+    <p class="msg" id="msg"></p>
+    <p class="note" id="note"></p>
+  </div>
+  <button class="reset" id="reset" type="button">Try the kiosk again</button>
+  <p class="hint">Every visitor begins at this kiosk. Try it before scrolling down.</p>
+</header>
+
+<section class="wrap" aria-label="Project overview">
+  <p class="lede">Digital assistants feel familiar because they are built from familiar social scripts. This exhibition traces one of those scripts, the female persona as the default face of AI, from the first chatbot to generative influencers and humanoid robots, and asks visitors to notice how often they accept the default without looking.</p>
+  <dl class="facts">
+    <div><dt>Role</dt><dd>Sole curator: research, visual analysis, curatorial writing, spatial and interaction design</dd></div>
+    <div><dt>Medium</dt><dd>Four-room virtual exhibition built on Metasteps, with a curatorial essay and talk</dd></div>
+    <div><dt>Context</dt><dd>Visual Culture (UIC3576), Underwood International College, Yonsei University, Spring 2026</dd></div>
+    <div><dt>Documentation</dt><dd>The Metasteps space is no longer hosted. It is shown here through stills and a recorded guided walkthrough.</dd></div>
+  </dl>
+  <div class="video">
+    <div class="player" id="player">
+        <button class="poster" id="poster" type="button" aria-label="Play the guided walkthrough video">
+          <img src="images/1_1_Chatbot.jpg" alt="">
+          <span class="play" aria-hidden="true"></span>
+          <span class="label">Guided walkthrough (2:33)</span>
+        </button>
+      </div>
+      <p class="alt-link">Video not loading? <a href="https://youtu.be/t1cQQuUoY_M" target="_blank" rel="noopener">Watch it on YouTube</a>.</p>
+  </div>
+</section>
+
+<section class="wrap room" aria-labelledby="r0">
+  <span class="room-no">Entrance</span><h2 id="r0">The default button</h2>
+  <div class="shots two">
+    <figure><img src="images/0_1_Enterance.jpg" alt="A white virtual gallery entrance with a wall-mounted kiosk screen showing an Issue Ticket button"></figure>
+    <figure><img src="images/0_2_Enterance.jpg" alt="The exhibition title She, the Interface on a white entrance wall"></figure>
+  </div>
+  <div class="text">
+    <p>The exhibition turns its argument into an interaction before any image is shown. A kiosk places a large "Issue ticket" button at the center of the screen and a quieter link at the bottom offering alternative guide personas. Visitors who press the obvious button receive a ticket from Iruda telling them to look again at the bottom of the screen. Those who found the alternative are thanked instead.</p>
+    <p>The point is felt rather than stated: a design default is a choice someone else made, and accepting it is also a choice.</p>
+  </div>
+  <figure class="storyboard">
+    <img src="images/storyboard.jpg" alt="Storyboard of the kiosk interaction: the Issue Ticket screen, a finger pressing the button, the screen asking the visitor to check their ticket, and two possible tickets, one saying Thank you and one saying Look at the very bottom of the kiosk screen">
+    <figcaption>Interaction storyboard. In the Metasteps build the kiosk appeared as a static screen; the flow was designed so it could be tested Wizard-of-Oz style with a human operator issuing tickets. The kiosk at the top of this page is its first working version.</figcaption>
+  </figure>
+</section>
+
+<section class="wrap room" aria-labelledby="r1">
+  <span class="room-no">Room 1</span><h2 id="r1">She Was Always the Default</h2>
+  <div class="shots two">
+    <figure><img src="images/1_1_Chatbot.jpg" alt="Room 1 wall titled She Was Always the Default, with Iruda 1.0 promotional illustrations"></figure>
+    <figure><img src="images/1_2_Chatbot.jpg" alt="Room 1 with a chat transcript from Iruda and a fan-made Guide to Date Luda image"></figure>
+  </div>
+  <div class="text">
+    <p>Iruda, a Korean chatbot marketed in 2020 as a 20-year-old "AI friend", reached hundreds of thousands of users in two weeks and became a target of organized sexual harassment within weeks. The room reads her promotional images through Goffman's analysis of gender display: the tilted head, the indirect gaze, the warm youthful palette.</p>
+    <p>It then sets her redesign beside the original. Iruda 2.0 returned with a cooler palette, more revealing clothing and a reshaped body. The update refined the aesthetic instead of questioning the persona. A timeline from ELIZA to Tay to Iruda shows that the pattern predates visual embodiment altogether.</p>
+  </div>
+</section>
+
+<section class="wrap room" aria-labelledby="r2">
+  <span class="room-no">Room 2</span><h2 id="r2">The Default, Now on Display</h2>
+  <div class="shots two">
+    <figure><img src="images/2_1_Virtual_Model.jpg" alt="Room 2 wall titled The Default, Now on Display with portraits of Korean virtual models"></figure>
+    <figure><img src="images/2_2_Virtual_Model.jpg" alt="Gallery wall of selfie-style posts by the virtual model Reah Keem"></figure>
+  </div>
+  <div class="text">
+    <p>Hyper-realistic virtual models moved the same persona into celebrity space. The room compares three strategies. Rozy's campaign posts make the cause a backdrop to her body. Reah Keem's selfie aesthetic manufactures pseudo-intimacy through close-ups and mundane settings. Lil Miquela wears activism as styling.</p>
+    <p>Different tactics, one premise: femininity as a means. Only the object on display changes.</p>
+  </div>
+</section>
+
+<section class="wrap room" aria-labelledby="r3">
+  <span class="room-no">Room 3</span><h2 id="r3">She Comes on Command</h2>
+  <div class="shots two">
+    <figure><img src="images/3_1_Virtual_Influencer.jpg" alt="Room 3 entrance wall titled She Comes on Command, surrounded by phone-screen prints"></figure>
+    <figure><img src="images/3_2_Virtual_Influencer.jpg" alt="Walls covered in profile screenshots of AI-generated influencer accounts, blurred"><figcaption>Account screenshots are blurred here, as in the curatorial essay.</figcaption></figure>
+  </div>
+  <div class="text">
+    <p>Visitors are surrounded by profile screens of AI-generated influencer accounts from Korea and abroad. Corporate virtual models still performed a life; these accounts drop the pretense entirely and link straight to paid adult content. With generative AI, the user no longer watches a curated persona but produces one on demand, privately and without friction.</p>
+  </div>
+</section>
+
+<section class="wrap room" aria-labelledby="r4">
+  <span class="room-no">Room 4</span><h2 id="r4">She Is No Longer Pixels</h2>
+  <div class="shots two">
+    <figure><img src="images/4_1_Physical_Robot.jpg" alt="Room 4 wall titled She Is No Longer Pixels with a film still on a screen"></figure>
+    <figure><img src="images/4_2_Physical_Robot.jpg" alt="Two film stills of a synthetic female android from the film JUNG_E"></figure>
+  </div>
+  <div class="text">
+    <p>The final room follows the desire past the screen: from Roxxxy, sold in 2010 as a humanoid "companion with a personality", to the 2023 Korean film JUNG_E, where a woman's consciousness is copied onto an assembly line of identical synthetic heads. Fiction here is not evidence. It names where the logic of the earlier rooms is already heading.</p>
+  </div>
+</section>
+
+<section class="wrap exit" aria-label="Exit">
+  <figure class="exit-fig">
+    <img src="images/5_0_End.jpg" alt="Final white room with the closing wall text">
+  </figure>
+  <p>You have seen the default.<br>Will you choose it again?</p>
+</section>
+
+<section class="wrap process" aria-labelledby="proc">
+  <h2 id="proc">From essay to space</h2>
+  <ol class="steps">
+    <li><span class="n">1</span><h3>Research and visual analysis</h3><p>Close readings of 29 images spanning 1966 to 2026, grounded in Goffman, Mulvey, and work on parasocial intimacy and postfeminist selfies.</p></li>
+    <li><span class="n">2</span><h3>Curatorial writing</h3><p>An essay written as wall text, revised across several rounds of peer feedback so each room ends on a question that opens the next.</p></li>
+    <li><span class="n">3</span><h3>Spatial design</h3><p>Four rooms built in Metasteps with a guided path of 25 stops, ordered chronologically so the gaze escalates as the visitor walks.</p></li>
+    <li><span class="n">4</span><h3>Interaction design</h3><p>A storyboarded kiosk flow that turns the thesis into a choice the visitor makes with their own hand, built here as a working prototype.</p></li>
+  </ol>
+</section>
+
+
+<section class="wrap voices" aria-labelledby="voc">
+  <h2 id="voc">What a classmate wrote</h2>
+  <blockquote>
+    <p>"I particularly appreciated how the exhibition was structured almost like the life cycle of an AI agent, beginning as an abstract and intangible virtual entity before gradually becoming embodied in a physical, moving, speaking robot. The progression was simultaneously impressive and unsettling.</p>
+    <p>What resonated most with me was the discussion of how gender stereotypes and biases are reproduced within AI systems. Kwan Chae's analysis was highly persuasive and encouraged me to reflect on the ways discrimination can be embedded not only in human interactions but also in emerging technologies."</p>
+  </blockquote>
+  <p class="cite">Anonymous classmate, answering "Which final project was most inspiring to you?"<br>End-of-semester peer feedback, Visual Culture, Spring 2026. Shared by the course instructor.</p>
+</section>
+
+<section class="wrap reflect" aria-labelledby="ref">
+  <h2 id="ref">What it led to</h2>
+  <div class="text">
+    <p>Designing the entrance kiosk taught me something the essay alone could not. Most people press the button a system places in front of them. The alternative is there, but few look for it.</p>
+    <p>The same pattern runs through my research on generative AI in university classrooms, where students accepted AI outputs they could have questioned. If defaults steer people this reliably, the design question turns around: how might we design systems whose defaults nudge people toward critical thinking rather than away from it?</p>
+  </div>
+</section>
+</main>
+<footer class="wrap">
+  <p>She, the Interface. Curated by Eunice (Kwan Chae) Park, Yonsei University, 2026.</p>
+  <p>Images of third-party personas and films appear as documentation of the exhibition for critical commentary.</p>
+</footer>
+<script>
+(function(){
+  var t=document.getElementById('ticket'),m=document.getElementById('msg'),n=document.getElementById('note'),
+      issue=document.getElementById('issue'),alt=document.getElementById('alt'),scr=document.getElementById('screen'),
+      prompt=document.getElementById('prompt'),reset=document.getElementById('reset');
+  function show(msg,note){
+    issue.style.display='none';prompt.style.display='none';alt.style.visibility='hidden';scr.style.display='block';
+    t.classList.remove('show');void t.offsetWidth;m.textContent=msg;n.textContent=note;t.classList.add('show');
+    reset.style.display='inline-block';
+  }
+  issue.addEventListener('click',function(){show('Look at the very bottom of the kiosk screen.','There was another option all along. Most visitors take the default without noticing it.');});
+  alt.addEventListener('click',function(){show('Thank you!','You looked past the default. The rest of the exhibition asks why so few do.');});
+  reset.addEventListener('click',function(){
+    issue.style.display='';prompt.style.display='';alt.style.visibility='';scr.style.display='none';
+    t.classList.remove('show');reset.style.display='none';issue.focus();
+  });
+  document.getElementById('poster').addEventListener('click',function(){
+    var f=document.createElement('iframe');
+    f.src='https://www.youtube-nocookie.com/embed/t1cQQuUoY_M?autoplay=1&rel=0';
+    f.title='She, the Interface: guided walkthrough';
+    f.allow='autoplay; encrypted-media; picture-in-picture; fullscreen';
+    f.allowFullscreen=true;
+    var p=document.getElementById('player');p.innerHTML='';p.appendChild(f);
+  });
+})();
+</script>
+</body>
+</html>
