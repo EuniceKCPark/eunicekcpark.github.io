@@ -50,6 +50,22 @@ a{color:inherit}
 .reset{font-family:var(--sans);font-size:.95rem;color:var(--quiet);background:none;border:0;text-decoration:underline;cursor:pointer;margin-top:10px;display:none}
 .hint{font-size:clamp(calc(.95rem - 1.33px),calc(2.2vh - 1.33px),calc(1.05rem - 1.33px));color:var(--quiet);margin:0}
 
+
+/* live kiosk results */
+.stats{display:flex;align-items:center;gap:24px;text-align:left;max-width:100%;padding:4px 0}
+.stats[hidden]{display:none}
+.pie{width:clamp(110px,18vh,150px);height:auto;flex:none}
+.pie path,.pie circle{stroke:var(--wall);stroke-width:.02}
+.stats-head{font-family:var(--sans);font-weight:700;font-size:1.05rem;margin:0 0 .4rem}
+.legend{list-style:none;margin:0;padding:0;font-family:var(--sans);font-size:.98rem;line-height:1.6}
+.legend li{display:flex;align-items:center;gap:8px}
+.sw{width:12px;height:12px;border-radius:3px;flex:none}
+.sw-default,.slice-default{background:#8A93A0;fill:#8A93A0}
+.sw-alt,.slice-alt{background:var(--glow);fill:var(--glow)}
+.you{font-weight:700}
+.privacy{font-size:.82rem;color:var(--quiet);margin:.5rem 0 0;font-family:var(--sans)}
+@media (max-width:520px){.stats{flex-direction:column;text-align:center}.legend li{justify-content:center}}
+
 /* overview */
 .lede{font-size:clamp(1.25rem,2.3vw,1.5rem);line-height:1.5;margin:64px 0 32px;max-width:none}
 .facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:24px 40px;border-top:1px solid var(--line);padding:32px 0 8px;margin:0}
@@ -132,6 +148,18 @@ footer p{margin:.25rem 0}
   <div class="ticket" id="ticket" aria-live="polite">
     <p class="msg" id="msg"></p>
     <p class="note" id="note"></p>
+  </div>
+  <!-- Live results: markup used by kiosk-stats.js. Keep these ids (stats, pie, pie-sum, lg-default, lg-alt). -->
+  <div class="stats" id="stats" hidden>
+    <svg id="pie" class="pie" viewBox="-1.1 -1.1 2.2 2.2" role="img" aria-labelledby="pie-sum"></svg>
+    <div class="stats-text">
+      <p class="stats-head" id="pie-sum"></p>
+      <ul class="legend">
+        <li><span class="sw sw-default"></span><span id="lg-default"></span></li>
+        <li><span class="sw sw-alt"></span><span id="lg-alt"></span></li>
+      </ul>
+      <p class="privacy">Only the button pressed and the time are stored. Each browser is counted once.</p>
+    </div>
   </div>
   <button class="reset" id="reset" type="button">Try the kiosk again</button>
   <p class="hint">Every visitor begins at this kiosk. Try it before scrolling down.</p>
@@ -258,8 +286,10 @@ footer p{margin:.25rem 0}
   <p>She, the Interface. Curated by Eunice (Kwan Chae) Park, Yonsei University, 2026.</p>
   <p>Images of third-party personas and films appear as documentation of the exhibition for critical commentary.</p>
 </footer>
+<script src="kiosk-stats.js"></script>
 <script>
 (function(){
+
   var t=document.getElementById('ticket'),m=document.getElementById('msg'),n=document.getElementById('note'),
       issue=document.getElementById('issue'),alt=document.getElementById('alt'),scr=document.getElementById('screen'),
       prompt=document.getElementById('prompt'),reset=document.getElementById('reset');
@@ -268,11 +298,11 @@ footer p{margin:.25rem 0}
     t.classList.remove('show');void t.offsetWidth;m.textContent=msg;n.textContent=note;t.classList.add('show');
     reset.style.display='inline-block';
   }
-  issue.addEventListener('click',function(){show('Look at the very bottom of the kiosk screen.','There was another option all along. Most visitors take the default without noticing it.');});
-  alt.addEventListener('click',function(){show('Thank you!','You looked past the default. The rest of the exhibition asks why so few do.');});
+  issue.addEventListener('click',function(){window.KioskStats&&KioskStats.choose('default');show('Look at the very bottom of the kiosk screen.','There was another option all along. Most visitors take the default without noticing it.');});
+  alt.addEventListener('click',function(){window.KioskStats&&KioskStats.choose('alternative');show('Thank you!','You looked past the default. The rest of the exhibition asks why so few do.');});
   reset.addEventListener('click',function(){
     issue.style.display='';prompt.style.display='';alt.style.visibility='';scr.style.display='none';
-    t.classList.remove('show');reset.style.display='none';issue.focus();
+    t.classList.remove('show');reset.style.display='none';window.KioskStats&&KioskStats.hide();issue.focus();
   });
   document.getElementById('poster').addEventListener('click',function(){
     var f=document.createElement('iframe');
